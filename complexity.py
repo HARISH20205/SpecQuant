@@ -1,5 +1,12 @@
+
+# This file includes code adapted from https://github.com/HyperKuvid-Labs/FrugalSOT/blob/main/src/prompt.py
+# licensed under the Apache License 2.0.
+# Modifications: Refactored into a class structure and added detailed complexity analysis.
+
+
 import nltk
 from nltk import word_tokenize, pos_tag, ne_chunk, sent_tokenize
+
 
 
 class ComplexityLevels:
@@ -10,13 +17,21 @@ class ComplexityLevels:
 
 class ClassifyPrompt:
     def __init__(self, prompt: str):
-        # nltk.download('punkt') 
-        # nltk.download('averaged_perceptron_tagger')
-        # nltk.download('maxent_ne_chunker')
-        # nltk.download('words')
-        # nltk.download('punkt_tab')
-        # nltk.download('averaged_perceptron_tagger_eng')
-        # nltk.download('maxent_ne_chunker_tab')
+        required_packages = [
+            'tokenizers/punkt',
+            'taggers/averaged_perceptron_tagger',
+            'chunkers/maxent_ne_chunker',
+            'corpora/words',
+            'tokenizers/punkt_tab',
+            'taggers/averaged_perceptron_tagger_eng',
+            'chunkers/maxent_ne_chunker_tab'
+        ]
+
+        for package in required_packages:
+            try:
+                nltk.data.find(package)
+            except LookupError:
+                nltk.download(package.split('/')[-1])
         self.prompt = prompt
         self.tokens = word_tokenize(prompt)
         self.pos_tags = pos_tag(self.tokens)
