@@ -1,5 +1,5 @@
 [project]
-name = "SpecuQuant – Speculative Decoding with Multi-Parent Quantization for Adaptive LLM Inference"
+name = "SpecQuant"
 version = "0.1.0"
 description = " system designed to make Large Language Models (LLMs) run faster on personal computers without sacrificing the quality of the answers. It intelligently adjusts to the complexity of your questions and the hardware you have."
 readme = "README.md"

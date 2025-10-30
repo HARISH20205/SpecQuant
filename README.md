@@ -1,17 +1,21 @@
-# SpecuQuant – Speculative Decoding with Multi-Parent Quantization for Adaptive LLM Inference
+# SpecQuant – Speculative Decoding with Multi-Parent Quantization for Adaptive LLM Inference
 
-This repository contains the source code for **TARP (Adaptive Speculative Decoding)**, a system designed to make Large Language Models (LLMs) run faster on personal computers without sacrificing the quality of the answers. It intelligently adjusts to the complexity of your questions and the hardware you have.
+> **⚠️ NOTICE: This repository has moved!**  
+> This project is now actively maintained at: **[https://github.com/HyperKuvid-Labs/SpecQuant](https://github.com/HyperKuvid-Labs/SpecQuant)**  
+> Please visit the new repository for the latest updates, issues, and contributions.
+
+This repository contains the source code for **SpecQuant (A Speculative Decoding with Multi-Parent Quantization for Adaptive LLM Inference)**, a system designed to make Large Language Models (LLMs) run faster on personal computers without sacrificing the quality of the answers. It intelligently adjusts to the complexity of your questions and the hardware you have.
 
 ## Overview
 
-Running large language models locally on consumer hardware is challenging due to limited memory and processing power. TARP addresses this by using a technique called **adaptive speculative decoding**.
+Running large language models locally on consumer hardware is challenging due to limited memory and processing power. SpecQuant addresses this by using a technique called **adaptive speculative decoding**.
 
 The core idea is to use different versions of the same model, quantized to different precision levels (like FP16, Q8, Q4). When you enter a prompt, the system first analyzes its complexity.
 
 - For **simple prompts**, it uses a highly compressed (quantized) and faster "draft" model to generate a draft response, which is then verified by a more precise "target" model.
 - For **more complex prompts**, it uses a less compressed draft model or no draft model at all to ensure high-quality output.
 
-This approach, called **SpecuQuant – Speculative Decoding with Multi-Parent Quantization for Adaptive LLM Inference**, speeds up inference significantly because the draft and target models are closely related (being versions of the same base model), leading to high acceptance rates of the drafted tokens.
+This approach, called **SpecQuant – Speculative Decoding with Multi-Parent Quantization for Adaptive LLM Inference**, speeds up inference significantly because the draft and target models are closely related (being versions of the same base model), leading to high acceptance rates of the drafted tokens.
 
 ## How It Works
 
@@ -60,22 +64,31 @@ With the target and draft models selected, the system performs speculative decod
 1.  **Clone the repository:**
 
     ```bash
-    git clone https://github.com/HARISH20205/TARP.git
-    cd TARP
+    git clone https://github.com/HARISH20205/SpecQuant.git
+    cd SpecQuant
     ```
 
 2.  **Install dependencies:**
     It is recommended to use a virtual environment.
 
     ```bash
-    python -m venv venv
-    source venv/bin/activate
+    # Using uv (recommended)
+    uv pip install -e .
+
+    # Or using pip
     pip install -e .
     ```
 
     _(Note: This will install the project in editable mode based on `pyproject.toml`)_
 
-3.  **Download NLTK data:**
+3.  **Setup LM Studio:**
+    Follow the instructions at [LM Studio](https://lmstudio.ai)
+
+    Add the models you want to use (e.g., Qwen2.5-FP16, Qwen2.5-Q8, Qwen2.5-Q4) in LM Studio.
+
+    Use the model names as specified in LM Studio when prompted in the code.
+
+4.  **Download NLTK data:**
     The complexity classification requires some data from the NLTK library. Run the following in a Python interpreter:
     ```python
     import nltk
@@ -114,3 +127,12 @@ The script will output the complexity classification, the models being used, and
 ├── pyproject.toml      # Project metadata and dependencies
 ├── README.md           # This file
 ```
+
+## Results
+
+| Run | **Normal** |              | **SpecQuant** |              |      **Improvement**      |
+| :-: | :--------: | :----------: | :-----------: | :----------: | :-----------------------: |
+|     |  Time (s)  | Accuracy (%) |   Time (s)    | Accuracy (%) | Speed-up (%) / Δ Accuracy |
+|  1  |    4.07    |     72.5     |     3.01      |     72.3     |  **35.2% faster / -0.2**  |
+|  2  |    6.42    |     75.0     |     4.50      |     74.9     |  **42.7% faster / -0.1**  |
+|  3  |    8.83    |     70.0     |     6.43      |     69.9     |  **37.3% faster / -0.1**  |
